@@ -1,3 +1,6 @@
+import dns from "node:dns";
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
 // Lets create a basic express app
 import express from "express";
 import cors from "cors";
