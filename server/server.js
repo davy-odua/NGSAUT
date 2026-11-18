@@ -1,12 +1,16 @@
 // Lets create a basic express app
 import express from "express";
 import cors from "cors";
-import "dotenv/config";
+import "dotenv/config";   //1. Loads the .env into process.env
 import cookieParser from "cookie-parser";
+import connectDB from "./config/mongodb.js";
 
-const app = express();
+const app = express();  //2. Create the app
 
 const port = process.env.PORT || 4000
+
+//Call the connection to database function
+connectDB();  //3. Connect to database here
 
 app.use(cors({credentials: true}));  //Gives the browser permission to let the frontend talk to your backend and to send cookies with the request
 //The browser normally blocks the frontend of one address from calling the backend of another address. Cors tells the browser "This is allowed"
@@ -19,11 +23,20 @@ app.use(cookieParser());   //Lets your server read cookies sent by the browser a
 
 //Below is the order of what happens
 // Request → cors → express.json() → cookieParser() → router → controller → response
-app.listen(port, () => console.log(`Server started on port: ${port}`));
-//app.listen() - Turns on your server. Until you call it, your app is just a set of instructions. When you use it, it starts your server and makes it wait for requests.
 
+//API Endpoints
 app.get('/', (req, res) => {
     res.send("API Working")
 });
+
+app.listen(port, () => console.log(`Server started on port: ${port}`));
+//app.listen() - Turns on your server. Until you call it, your app is just a set of instructions. When you use it, it starts your server and makes it wait for requests.
+
+
+
+//This is the model to use 
+// 1. create the app
+// 2. configure it   (middleware, routes)
+// 3. open it up     (listen)
 
 export default app;
