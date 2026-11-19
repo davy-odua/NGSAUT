@@ -13,7 +13,7 @@ const app = express();  //2. Create the app
 const port = process.env.PORT || 4000
 
 //Call the connection to database function
-connectDB();  //3. Connect to database here
+await connectDB();  //3. Connect to database here
 
 app.use(cors({credentials: true}));  //Gives the browser permission to let the frontend talk to your backend and to send cookies with the request
 //The browser normally blocks the frontend of one address from calling the backend of another address. Cors tells the browser "This is allowed"
@@ -34,7 +34,6 @@ app.get('/', (req, res) => {
 
 app.listen(port, () => console.log(`Server started on port: ${port}`));
 //app.listen() - Turns on your server. Until you call it, your app is just a set of instructions. When you use it, it starts your server and makes it wait for requests.
-
 
 
 //This is the model to use 
