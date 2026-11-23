@@ -70,5 +70,27 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     //Destructure the request body to create 2 variables from the user
     const {email, password} = req.body
-    
+    if(!email || !password){
+        res.json({success: false, message: "All fields are important"});
+    }
+    //Create the try catch block to try a task and if it fails print an error
+    try {
+        //If user does not exist print an error message
+        const user = await userModel.findOne({email});
+        if(!user){
+            res.json({success: false, message: "User does not exist"})
+        }
+        //If the user exists, then compare the user password with the hashed password in the database
+
+        const matching = await bcrypt.compare(password, user.password);
+        if(!matching){
+            res.json({success: false, message: "Invalid Password"})
+        }
+        //If the passwords do match then
+
+
+
+    } catch (error) {
+        return res.json({success: false, message: error.message});
+    }
 }
