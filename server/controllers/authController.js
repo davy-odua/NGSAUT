@@ -65,3 +65,10 @@ export const register = async (req, res) => {
 //7. It sends a JWT back inside a cookie
 //8. It replies success
 
+//Now that the user has been registered successfully in the database, create a login function to enable a registered user to enter 
+//Create a Login Controller.
+export const login = async (req, res) => {
+    //Destructure the request body to create 2 variables from the user
+    const {email, password} = req.body
+    
+}
