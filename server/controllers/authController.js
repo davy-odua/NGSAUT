@@ -54,3 +54,14 @@ export const register = async (req, res) => {
         });
     }
 }
+
+//This is the whole flow.
+//1. React sends the name, email and password
+//2. The function check nothing is missing
+//3. It checks the email is not registered. (The user does not exist)
+//4. It hashes the password
+//5. It saves the new user with the hashed password in MongoDB
+//6. It creates a JWT containing the user's _id
+//7. It sends a JWT back inside a cookie
+//8. It replies success
+
