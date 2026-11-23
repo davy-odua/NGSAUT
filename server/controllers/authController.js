@@ -11,7 +11,7 @@ export const register = async (req, res) => {
             message: "Missing Details"
         });
     }
-    //Try to do something if an error occurs, then print an error message instead of crushing
+    //Try to do something if an error occurs, then print an error message instead of crashing the server
     try {
         //Now create the user's account and store that message in the database
         const existingUser = await userModel.findOne({email});
@@ -31,7 +31,19 @@ export const register = async (req, res) => {
 
         //Now we have to send 1 token for authentication and we will send this token using cookies
         //HTTP is stateless. The token is how the server recognizes a logged-in user without asking for the password each time.
-        const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, {expiresIn: '7d'});
+        const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, {expiresIn: '7d'});    //create the token and store it in a variable called token
+        // jwt.sign is what combines all properties required for creating the token
+        //{id:user._id} - we store the user's MONGODB_id, so that later we can know who is making a request.
+        //process.env.JWT_SECRET  - a secret key from your .env file. It signs the token so nobody can fake one
+        //expiresIn: '7d'  - the token stops working after 7 days.
+
+        //Now that we have created the toke, lets send the token inside a cookie
+        res.cookie('token', token, {
+            httpOnly: true,  //JavaScript in the browser cannot read this cookie. This protects it from being stolen by malicious scripts
+            secure: process.env.NODE_ENV === 'production',
+            samesite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
 
     } catch (error) {
         return res.json({
