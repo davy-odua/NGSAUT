@@ -86,8 +86,22 @@ export const login = async (req, res) => {
         if(!matching){
             res.json({success: false, message: "Invalid Password"})
         }
-        //If the passwords do match then
+        //If the passwords do match then create the token and put it inside a cookie which will send it to the browser to tell the browser that this is them same 
+        //user who actually logged in and this will prevent the user from inputing the password in order to login again and this will improve the user experience 
+        //with our web application
+        
+        const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, {expiresIn : '7d'});
 
+        res.cookie('token', token, {
+            httpOnly: true,  //Javascript in the browser cannot read this cookie
+            secure: process.env.NODE_ENV === 'production',  //Its secure only in production environment
+            samesite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        return res.json({success: true,
+                        message: "Logged In Successfully"
+        });
 
 
     } catch (error) {
