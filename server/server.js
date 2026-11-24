@@ -7,6 +7,7 @@ import cors from "cors";
 import "dotenv/config";   //1. Loads the .env into process.env
 import cookieParser from "cookie-parser";
 import connectDB from "./config/mongodb.js";
+import router from "./routes/authRoutes.js";
 
 const app = express();  //2. Create the app
 
@@ -31,6 +32,7 @@ app.use(cookieParser());   //Lets your server read cookies sent by the browser a
 app.get('/', (req, res) => {
     res.send("API Working")
 });
+app.use('/api/auth', router);
 
 app.listen(port, () => console.log(`Server started on port: ${port}`));
 //app.listen() - Turns on your server. Until you call it, your app is just a set of instructions. When you use it, it starts your server and makes it wait for requests.
