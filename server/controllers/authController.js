@@ -1,6 +1,7 @@
 import userModel from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import transpoter from "../config/nodemailer.js";
 
 //We first need to register our user in the database
 export const register = async (req, res) => {
@@ -46,6 +47,15 @@ export const register = async (req, res) => {
             samesite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
+
+        //Sending a welcome email
+        const mailOption = {
+            from: process.env.SENDER_EMAIL,
+            to: email,
+            subject: 'Welcome to NGS',
+            text: `Welcome to NGS. Your account has been created with email id: ${email}`
+        }
+        await transpoter.sendMail(mailOption);
 
         return res.json({success: true, message:"User created successfully"});
 
