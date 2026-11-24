@@ -1,4 +1,6 @@
 import userModel from "../models/userModel.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 //We first need to register our user in the database
 export const register = async (req, res) => {
@@ -45,7 +47,7 @@ export const register = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        return res.json({success: true});
+        return res.json({success: true, message:"User created successfully"});
 
     } catch (error) {
         return res.json({
