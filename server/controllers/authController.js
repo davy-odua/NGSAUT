@@ -84,7 +84,7 @@ export const login = async (req, res) => {
 
         const matching = await bcrypt.compare(password, user.password);
         if(!matching){
-            res.json({success: false, message: "Invalid Password"})
+            res.json({success: false, message: "Invalid Password"});
         }
         //If the passwords do match then create the token and put it inside a cookie which will send it to the browser to tell the browser that this is them same 
         //user who actually logged in and this will prevent the user from inputing the password in order to login again and this will improve the user experience 
@@ -106,5 +106,24 @@ export const login = async (req, res) => {
 
     } catch (error) {
         return res.json({success: false, message: error.message});
+    }
+}
+
+
+//Now create the logout fucntion
+export const logout = async (req, res) => {
+    //Now we have to just clear the cookie from the response and the user will logout immediately.
+    try {
+        
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            samesite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+        });
+
+        return res.json({success:true, message:"Logged Out"})
+
+    } catch (error) {
+        return res.json({success: false, message: error.message});        
     }
 }
